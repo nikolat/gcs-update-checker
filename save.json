@@ -4,8 +4,8 @@
 	"rssUrl": "http://buynowforsale.shillest.net/ghosts/ghosts/index.rss",
 	"relays": [
 		"wss://relay.nostr.wirednet.jp",
-		"wss://nostr-relay.nokotaro.com/",
+		"wss://nostr-relay.nokotaro.com",
 		"wss://nostr.h3y6e.com",
-		"wss://relay.nostr.or.jp/"
+		"wss://relay.nostr.or.jp"
 	]
 }
