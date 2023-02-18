@@ -1,7 +1,7 @@
 name: Check New Entry
 on:
   schedule:
-    - cron: '30 * * * *'
+    - cron: '45 * * * *'
   workflow_dispatch:
 jobs:
   check:
