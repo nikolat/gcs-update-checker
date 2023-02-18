@@ -81,7 +81,7 @@ import 'websocket-polyfill';
 			const pubDateStr: string = item.pubDate ? item.pubDate : '';
 			const pubDate: number = Date.parse(pubDateStr) / 1000;
 			if (pubDate > latestTime) {
-				const dateTime: Date = new Date(pubDate * 1000);
+				const dateTime: Date = new Date((pubDate + 9 * 60 * 60) * 1000);
 				message.push(item.title);
 				message.push(dateTime.toLocaleString('ja-JP'));
 				message.push(item.link);
