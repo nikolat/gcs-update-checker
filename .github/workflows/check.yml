@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: '45 * * * *'
   workflow_dispatch:
-permissions: read-all|write-all
+permissions: write-all
 jobs:
   check:
     runs-on: ubuntu-latest
