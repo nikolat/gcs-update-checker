@@ -53,21 +53,19 @@ import 'websocket-polyfill';
 		};
 		event.id = getEventHash(event);
 		event.sig = signEvent(event, sk);
-		const pubs: Pub[] = pool.publish(relays, event);
+		const pubs: Pub = pool.publish(relays, event);
 		let count = 0;
-		pubs.forEach((pub: Pub) => {
-			pub.on('ok', () => {
-				count++;
-				if (count >= relays.length) {
-					pool.close(relays);
-				}
-			});
-			pub.on('failed', (reason: any) => {
-				count++;
-				if (count >= relays.length) {
-					pool.close(relays);
-				}
-			});
+		pubs.on('ok', () => {
+			count++;
+			if (count >= relays.length) {
+				pool.close(relays);
+			}
+		});
+		pubs.on('failed', (reason: any) => {
+			count++;
+			if (count >= relays.length) {
+				pool.close(relays);
+			}
 		});
 	}
 
