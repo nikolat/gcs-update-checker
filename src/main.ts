@@ -53,9 +53,9 @@ import 'websocket-polyfill';
 		};
 		event.id = getEventHash(event);
 		event.sig = signEvent(event, sk);
-		const pubs = pool.publish(relays, event);
+		const pubs: Pub[] = pool.publish(relays, event);
 		let count = 0;
-		(pubs as any).forEach((pub: Pub) => {
+		pubs.forEach((pub: Pub) => {
 			pub.on('ok', () => {
 				count++;
 				if (count >= relays.length) {
