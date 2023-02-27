@@ -6,6 +6,7 @@ import {
 	signEvent,
 	nip19,
 	Event,
+	Pub
 } from 'nostr-tools';
 import 'websocket-polyfill';
 
@@ -54,8 +55,7 @@ import 'websocket-polyfill';
 		event.sig = signEvent(event, sk);
 		const pubs = pool.publish(relays, event);
 		let count = 0;
-		for (let i = 0; i < pubs.length; i++) {
-			const pub = pubs[i];
+		(pubs as any).forEach((pub: Pub) => {
 			pub.on('ok', () => {
 				count++;
 				if (count >= relays.length) {
@@ -68,7 +68,7 @@ import 'websocket-polyfill';
 					pool.close(relays);
 				}
 			});
-		}
+		});
 	}
 
 	// RSSを見に行って新着情報を取得
