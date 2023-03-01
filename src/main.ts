@@ -37,8 +37,9 @@ import 'websocket-polyfill';
 		for (let i = 0; i < relays.length; i++) {
 			try {
 				const relay = await pool.ensureRelay(relays[i]);
+				console.log('ensureRelay OK: ' + relays[i]);
 			} catch (error) {
-				console.log('ensureRelay error: ', error);
+				console.log('ensureRelay error: ' + relays[i], error);
 			}
 		}
 		const pk = getPublicKey(sk);
