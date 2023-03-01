@@ -33,7 +33,7 @@ import 'websocket-polyfill';
 
 	// Nostrに投稿
 	async function postNostr(sk: string, message: string, relays: string[]) {
-		const pool = new SimplePool();
+		const pool = new SimplePool({eoseSubTimeout: 600, getTimeout: 600});
 		for (let i = 0; i < relays.length; i++) {
 			try {
 				const relay = await pool.ensureRelay(relays[i]);
