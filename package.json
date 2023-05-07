@@ -9,9 +9,9 @@
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
-		"@types/node": "^18.15.0",
-		"nostr-tools": "1.7.4",
-		"rss-parser": "^3.12.0",
+		"@types/node": "^20.1.0",
+		"nostr-tools": "^1.10.1",
+		"rss-parser": "^3.13.0",
 		"websocket-polyfill": "^0.0.3"
 	},
 	"license": "UNLICENSED",
