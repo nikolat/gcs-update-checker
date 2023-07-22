@@ -21,9 +21,9 @@ import 'websocket-polyfill';
 	const NOSTR_PRIVATE_KEY = process.env.NOSTR_PRIVATE_KEY ? process.env.NOSTR_PRIVATE_KEY : '';
 	const {type, data} = nip19.decode(NOSTR_PRIVATE_KEY);
 	const sk: string = typeof data === 'string' ? data : '';
-	const [message, latestTimeNew] = await getMessage();
+	const [message, latestTimeNew, urls] = await getMessage();
 	if (message != '') {
-		await postNostr(sk, message, relaysdef);
+		await postNostr(sk, message, relaysdef, urls);
 		obj.latestTime = latestTimeNew;
 		fs.writeFileSync(saveFileName, JSON.stringify(obj, null, '\t'));
 	}
@@ -32,7 +32,7 @@ import 'websocket-polyfill';
 	}
 
 	// Nostrに投稿
-	async function postNostr(sk: string, message: string, relays: string[]) {
+	async function postNostr(sk: string, message: string, relays: string[], urls: string[]) {
 		const pool = new SimplePool({eoseSubTimeout: 60, getTimeout: 60});
 		const connectedRelays = [];
 		for (let i = 0; i < relays.length; i++) {
@@ -47,11 +47,15 @@ import 'websocket-polyfill';
 			}
 		}
 		const pk = getPublicKey(sk);
+		const tags = [['t', hashTag]];
+		for (const url of urls) {
+			tags.push(['r', url]);
+		}
 		const event: Event = {
 			kind: 1,
 			pubkey: pk,
 			created_at: Math.floor(Date.now() / 1000),
-			tags: [],
+			tags: tags,
 			content: message,
 			id: '',
 			sig: ''
@@ -78,6 +82,7 @@ import 'websocket-polyfill';
 	async function getMessage() {
 		const parser = new Parser();
 		let latestTimeNew = latestTime;
+		const urls: any[] = [];
 		const message = [];
 		const feed = await parser.parseURL(rssUrl);
 		feed.items.forEach(item => {
@@ -89,17 +94,18 @@ import 'websocket-polyfill';
 				message.push(dateTime.toLocaleString('ja-JP'));
 				message.push(item.link);
 				message.push('');
+				urls.push(item.link);
 			}
 			if (latestTimeNew < pubDate) {
 				latestTimeNew = pubDate;
 			}
 		});
 		if (message.length != 0) {
-			message.push(hashTag);
+			message.push('#' + hashTag);
 			console.log(message.join('\n'));
 		}
 		console.log('latestTime: ', latestTime);
 		console.log('latestTimeNew: ', latestTimeNew);
-		return [message.join('\n'), latestTimeNew];
+		return [message.join('\n'), latestTimeNew, urls];
 	}
 })();
