@@ -9,8 +9,8 @@
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
-		"@types/node": "^20.1.0",
-		"nostr-tools": "^1.10.1",
+		"@types/node": "^20.4.4",
+		"nostr-tools": "^1.13.0",
 		"rss-parser": "^3.13.0",
 		"websocket-polyfill": "^0.0.3"
 	},

@@ -3,7 +3,7 @@ import {
 	getPublicKey,
 	SimplePool,
 	getEventHash,
-	signEvent,
+	getSignature,
 	nip19,
 	Event,
 	Pub
@@ -61,7 +61,7 @@ import 'websocket-polyfill';
 			sig: ''
 		};
 		event.id = getEventHash(event);
-		event.sig = signEvent(event, sk);
+		event.sig = getSignature(event, sk);
 		const pubs: Pub = pool.publish(relays, event);
 		let count = 0;
 		pubs.on('ok', () => {
