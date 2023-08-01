@@ -3,7 +3,7 @@ import {
 	getPublicKey,
 	SimplePool,
 	getEventHash,
-	getSignature,
+	signEvent,
 	nip19,
 	Event,
 	Pub
@@ -18,7 +18,7 @@ import 'websocket-polyfill';
 	const rssUrl = obj.rssUrl;
 	const latestTime = obj.latestTime;
 	const relaysdef = obj.relays;
-	const NOSTR_PRIVATE_KEY = process.env.NOSTR_PRIVATE_KEY ? process.env.NOSTR_PRIVATE_KEY : '';
+	const NOSTR_PRIVATE_KEY = process.env.NOSTR_PRIVATE_KEY ?? '';
 	const {type, data} = nip19.decode(NOSTR_PRIVATE_KEY);
 	const sk: string = typeof data === 'string' ? data : '';
 	const [message, latestTimeNew, urls] = await getMessage();
@@ -60,7 +60,7 @@ import 'websocket-polyfill';
 			sig: ''
 		};
 		event.id = getEventHash(event);
-		event.sig = getSignature(event, sk);
+		event.sig = signEvent(event, sk);
 		const pubs: Pub = pool.publish(relays, event);
 		let count = 0;
 		pubs.on('ok', () => {
