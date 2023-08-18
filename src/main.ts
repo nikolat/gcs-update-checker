@@ -22,7 +22,7 @@ import 'websocket-polyfill';
 	const {type, data} = nip19.decode(NOSTR_PRIVATE_KEY);
 	const sk: string = typeof data === 'string' ? data : '';
 	const [message, latestTimeNew, urls] = await getMessage();
-	if (message != '') {
+	if (message !== '') {
 		await postNostr(sk, message, relaysdef, urls);
 		obj.latestTime = latestTimeNew;
 		fs.writeFileSync(saveFileName, JSON.stringify(obj, null, '\t'));
@@ -81,30 +81,32 @@ import 'websocket-polyfill';
 	async function getMessage() {
 		const parser = new Parser();
 		let latestTimeNew = latestTime;
-		const urls: any[] = [];
-		const message = [];
+		const urls: Set<any> = new Set();
+		const message = new Set();
 		const feed = await parser.parseURL(rssUrl);
 		feed.items.forEach(item => {
-			const pubDateStr: string = item.pubDate ? item.pubDate : '';
+			const pubDateStr: string = item.pubDate ?? '';
 			const pubDate: number = Date.parse(pubDateStr) / 1000;
 			if (pubDate > latestTime) {
 				const dateTime: Date = new Date((pubDate + 9 * 60 * 60) * 1000);
-				message.push(item.title);
-				message.push(dateTime.toLocaleString('ja-JP'));
-				message.push(item.link);
-				message.push('');
-				urls.push(item.link);
+				const entry = [];
+				entry.push(item.title);
+				entry.push(dateTime.toLocaleString('ja-JP'));
+				entry.push(item.link);
+				entry.push('');
+				message.add(entry.join('\n'));
+				urls.add(item.link);
 			}
 			if (latestTimeNew < pubDate) {
 				latestTimeNew = pubDate;
 			}
 		});
-		if (message.length != 0) {
-			message.push('#' + hashTag);
-			console.log(message.join('\n'));
+		if (message.size != 0) {
+			message.add('#' + hashTag);
+			console.log(Array.from(message).join('\n'));
 		}
 		console.log('latestTime: ', latestTime);
 		console.log('latestTimeNew: ', latestTimeNew);
-		return [message.join('\n'), latestTimeNew, urls];
+		return [Array.from(message).join('\n'), latestTimeNew, Array.from(urls)];
 	}
 })();
