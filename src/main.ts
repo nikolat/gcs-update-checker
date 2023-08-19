@@ -9,6 +9,11 @@ import {
 	Pub
 } from 'nostr-tools';
 import 'websocket-polyfill';
+import {
+	AppBskyFeedPost,
+	BskyAgent,
+	RichText
+} from '@atproto/api';
 
 (async() => {
 	const saveFileName = 'save.json';
@@ -21,9 +26,12 @@ import 'websocket-polyfill';
 	const NOSTR_PRIVATE_KEY = process.env.NOSTR_PRIVATE_KEY ?? '';
 	const {type, data} = nip19.decode(NOSTR_PRIVATE_KEY);
 	const sk: string = typeof data === 'string' ? data : '';
+	const BLUESKY_IDENTIFIER = process.env.BLUESKY_IDENTIFIER ?? '';
+	const BLUESKY_PASSWORD = process.env.BLUESKY_PASSWORD ?? '';
 	const [message, latestTimeNew, urls] = await getMessage();
 	if (message !== '') {
 		await postNostr(sk, message, relaysdef, urls);
+		await postBluesky(BLUESKY_IDENTIFIER, BLUESKY_PASSWORD, message);
 		obj.latestTime = latestTimeNew;
 		fs.writeFileSync(saveFileName, JSON.stringify(obj, null, '\t'));
 	}
@@ -75,6 +83,25 @@ import 'websocket-polyfill';
 				pool.close(relays);
 			}
 		});
+	}
+
+	// Blueskyに投稿
+	async function postBluesky(identifier: string, password:string, text: string) {
+		const agent = new BskyAgent({service: 'https://bsky.social'});
+		await agent.login({
+			identifier,
+			password
+		});
+		const rt = new RichText({text});
+		await rt.detectFacets(agent);
+		const postRecord: AppBskyFeedPost.Record = {
+			$type: 'app.bsky.feed.post',
+			text: rt.text,
+			facets: rt.facets,
+			createdAt: new Date().toISOString(),
+		};
+		const res = await agent.post(postRecord);
+		console.log(res);
 	}
 
 	// RSSを見に行って新着情報を取得
