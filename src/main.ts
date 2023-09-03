@@ -32,8 +32,10 @@ import {
 	if (message !== '') {
 		await postNostr(sk, message, relaysdef, urls);
 		await postBluesky(BLUESKY_IDENTIFIER, BLUESKY_PASSWORD, message);
+		console.log('post complete');
 		obj.latestTime = latestTimeNew;
 		fs.writeFileSync(saveFileName, JSON.stringify(obj, null, '\t'));
+		console.log('save complete');
 	}
 	else {
 		console.log('not updated.');
