@@ -111,7 +111,7 @@ import {
 		const urls: Set<any> = new Set();
 		const message = new Set();
 		const feed = await parser.parseURL(rssUrl);
-		feed.items.forEach(item => {
+		for (const item of feed.items.reverse()) {
 			const pubDateStr: string = item.pubDate ?? '';
 			const pubDate: number = Date.parse(pubDateStr) / 1000;
 			if (pubDate > latestTime) {
@@ -127,7 +127,9 @@ import {
 			if (latestTimeNew < pubDate) {
 				latestTimeNew = pubDate;
 			}
-		});
+			if (Array.from(message).join('\n').length > 200)
+				break;
+		}
 		if (message.size != 0) {
 			message.add('#' + hashTag);
 			console.log(Array.from(message).join('\n'));
