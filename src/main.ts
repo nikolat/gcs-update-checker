@@ -15,7 +15,7 @@ import {
 	RichText
 } from '@atproto/api';
 
-const isDbug = false;
+const isDebug = false;
 
 (async() => {
 	const saveFileName = 'save.json';
@@ -30,9 +30,9 @@ const isDbug = false;
 	const BLUESKY_PASSWORD = process.env.BLUESKY_PASSWORD ?? '';
 	const [message, latestTimeNew, urls] = await getMessage();
 	if (message !== '') {
-		if (!isDbug) {
+		if (!isDebug) {
 			const {type, data} = nip19.decode(NOSTR_PRIVATE_KEY);
-			const sk: string = typeof data === 'string' ? data : '';
+			const sk: string = type  === 'nsec' ? data : '';
 			await postNostr(sk, message, relaysdef, urls);
 			await postBluesky(BLUESKY_IDENTIFIER, BLUESKY_PASSWORD, message);
 		}
@@ -41,7 +41,7 @@ const isDbug = false;
 		}
 		console.log('post complete');
 		obj.latestTime = latestTimeNew;
-		if (!isDbug) {
+		if (!isDebug) {
 			fs.writeFileSync(saveFileName, JSON.stringify(obj, null, '\t'));
 		}
 		console.log('save complete');
