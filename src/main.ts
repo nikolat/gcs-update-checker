@@ -15,6 +15,8 @@ import {
 	RichText
 } from '@atproto/api';
 
+const isDbug = false;
+
 (async() => {
 	const saveFileName = 'save.json';
 	const fs = require('fs');
@@ -24,17 +26,24 @@ import {
 	const latestTime = obj.latestTime;
 	const relaysdef = obj.relays;
 	const NOSTR_PRIVATE_KEY = process.env.NOSTR_PRIVATE_KEY ?? '';
-	const {type, data} = nip19.decode(NOSTR_PRIVATE_KEY);
-	const sk: string = typeof data === 'string' ? data : '';
 	const BLUESKY_IDENTIFIER = process.env.BLUESKY_IDENTIFIER ?? '';
 	const BLUESKY_PASSWORD = process.env.BLUESKY_PASSWORD ?? '';
 	const [message, latestTimeNew, urls] = await getMessage();
 	if (message !== '') {
-		await postNostr(sk, message, relaysdef, urls);
-		await postBluesky(BLUESKY_IDENTIFIER, BLUESKY_PASSWORD, message);
+		if (!isDbug) {
+			const {type, data} = nip19.decode(NOSTR_PRIVATE_KEY);
+			const sk: string = typeof data === 'string' ? data : '';
+			await postNostr(sk, message, relaysdef, urls);
+			await postBluesky(BLUESKY_IDENTIFIER, BLUESKY_PASSWORD, message);
+		}
+		else {
+			console.log('message length: ', message.length);
+		}
 		console.log('post complete');
 		obj.latestTime = latestTimeNew;
-		fs.writeFileSync(saveFileName, JSON.stringify(obj, null, '\t'));
+		if (!isDbug) {
+			fs.writeFileSync(saveFileName, JSON.stringify(obj, null, '\t'));
+		}
 		console.log('save complete');
 	}
 	else {
@@ -111,6 +120,7 @@ import {
 		const parser = new Parser();
 		let latestTimeNew = latestTime;
 		const urls: Set<any> = new Set();
+		const messagePre = new Set();
 		const message = new Set();
 		const feed = await parser.parseURL(rssUrl);
 		for (const item of feed.items.reverse()) {
@@ -123,14 +133,15 @@ import {
 				entry.push(dateTime.toLocaleString('ja-JP'));
 				entry.push(item.link);
 				entry.push('');
+				messagePre.add(entry.join('\n'));
+				if (Array.from(messagePre).join('\n').length > 280)
+					break;
 				message.add(entry.join('\n'));
 				urls.add(item.link);
 			}
 			if (latestTimeNew < pubDate) {
 				latestTimeNew = pubDate;
 			}
-			if (Array.from(message).join('\n').length > 200)
-				break;
 		}
 		if (message.size != 0) {
 			message.add('#' + hashTag);
