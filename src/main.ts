@@ -1,12 +1,8 @@
 import Parser from 'rss-parser';
 import {
-	getPublicKey,
 	SimplePool,
-	getEventHash,
-	signEvent,
 	nip19,
-	Event,
-	Pub
+	finishEvent,
 } from 'nostr-tools';
 import 'websocket-polyfill';
 import {
@@ -53,47 +49,21 @@ const isDebug = false;
 	// Nostrに投稿
 	async function postNostr(sk: string, message: string, relays: string[], urls: string[]) {
 		const pool = new SimplePool({eoseSubTimeout: 60, getTimeout: 60});
-		const connectedRelays = [];
-		for (const relay of relays) {
-			try {
-				connectedRelays.push(relay);
-				console.log('ensureRelay OK: ' + relay);
-			} catch (error) {
-				console.log('ensureRelay error: ' + relay, error);
-				pool.close(connectedRelays);
-				return;
-			}
-		}
-		const pk = getPublicKey(sk);
 		const tags = [['t', hashTag]];
 		for (const url of urls) {
 			tags.push(['r', url]);
 		}
-		const event: Event = {
+		const unsignedEvent = {
 			kind: 1,
-			pubkey: pk,
+			pubkey: '',
 			created_at: Math.floor(Date.now() / 1000),
 			tags: tags,
 			content: message,
-			id: '',
-			sig: ''
 		};
-		event.id = getEventHash(event);
-		event.sig = signEvent(event, sk);
-		const pubs: Pub = pool.publish(relays, event);
-		let count = 0;
-		pubs.on('ok', () => {
-			count++;
-			if (count >= relays.length) {
-				pool.close(relays);
-			}
-		});
-		pubs.on('failed', (reason: any) => {
-			count++;
-			if (count >= relays.length) {
-				pool.close(relays);
-			}
-		});
+		const signedEvent = finishEvent(unsignedEvent, sk)
+		const pubs = pool.publish(relays, signedEvent);
+		await Promise.all(pubs);
+		pool.close(relays);
 	}
 
 	// Blueskyに投稿

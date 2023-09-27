@@ -9,10 +9,11 @@
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
-		"@atproto/api": "^0.6.4",
-		"@types/node": "^20.4.5",
-		"nostr-tools": "1.10.1",
+		"@atproto/api": "^0.6.20",
+		"@types/node": "^20.7.1",
+		"nostr-tools": "^1.16.0",
 		"rss-parser": "^3.13.0",
+		"typescript": "^5.2.2",
 		"websocket-polyfill": "^0.0.3"
 	},
 	"license": "UNLICENSED",
