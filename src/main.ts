@@ -17,19 +17,16 @@ const isDebug = false;
 	const saveFileName = 'save.json';
 	const fs = require('fs');
 	const obj = JSON.parse(fs.readFileSync(saveFileName, 'utf8'));
-	const hashTag = obj.hashTag;
-	const rssUrl = obj.rssUrl;
 	const latestTime = obj.latestTime;
-	const relaysdef = obj.relays;
 	const NOSTR_PRIVATE_KEY = process.env.NOSTR_PRIVATE_KEY ?? '';
 	const BLUESKY_IDENTIFIER = process.env.BLUESKY_IDENTIFIER ?? '';
 	const BLUESKY_PASSWORD = process.env.BLUESKY_PASSWORD ?? '';
-	const [message, latestTimeNew, urls] = await getMessage();
+	const [message, latestTimeNew, urls] = await getMessage(obj.rssUrl, obj.hashTag, latestTime);
 	if (message !== '') {
 		if (!isDebug) {
 			const {type, data} = nip19.decode(NOSTR_PRIVATE_KEY);
 			const sk: string = type  === 'nsec' ? data : '';
-			await postNostr(sk, message, relaysdef, urls);
+			await postNostr(sk, message, obj.relays, urls, obj.hashTag);
 			await postBluesky(BLUESKY_IDENTIFIER, BLUESKY_PASSWORD, message);
 		}
 		else {
@@ -47,12 +44,9 @@ const isDebug = false;
 	}
 
 	// Nostrに投稿
-	async function postNostr(sk: string, message: string, relays: string[], urls: string[]) {
+	async function postNostr(sk: string, message: string, relays: string[], urls: string[], hashTag: string) {
 		const pool = new SimplePool({eoseSubTimeout: 60, getTimeout: 60});
-		const tags = [['t', hashTag]];
-		for (const url of urls) {
-			tags.push(['r', url]);
-		}
+		const tags = [['t', hashTag]].concat(urls.map(url => ['r', url]));
 		const unsignedEvent = {
 			kind: 1,
 			pubkey: '',
@@ -86,12 +80,12 @@ const isDebug = false;
 	}
 
 	// RSSを見に行って新着情報を取得
-	async function getMessage() {
+	async function getMessage(rssUrl: string, hashTag: string, latestTime: number): Promise<[string, number, string[]]> {
 		const parser = new Parser();
 		let latestTimeNew = latestTime;
-		const urls: Set<any> = new Set();
-		const messagePre = new Set();
-		const message = new Set();
+		const urls: Set<string> = new Set();
+		const messagePre: Set<string> = new Set();
+		const message: Set<string> = new Set();
 		const feed = await parser.parseURL(rssUrl);
 		for (const item of feed.items.reverse()) {
 			const pubDateStr: string = item.pubDate ?? '';
@@ -107,7 +101,8 @@ const isDebug = false;
 				if (Array.from(messagePre).join('\n').length > 280)
 					break;
 				message.add(entry.join('\n'));
-				urls.add(item.link);
+				if (item.link)
+					urls.add(item.link);
 			}
 			if (latestTimeNew < pubDate) {
 				latestTimeNew = pubDate;
