@@ -46,7 +46,7 @@ const isDebug = false;
 	// Nostrに投稿
 	async function postNostr(sk: string, message: string, relays: string[], urls: string[], hashTag: string) {
 		const pool = new SimplePool({eoseSubTimeout: 60, getTimeout: 60});
-		const tags = [['t', hashTag]].concat(urls.map(url => ['r', url]));
+		const tags = [['t', hashTag], ...urls.map(url => ['r', url]), ['proxy', obj.webUrl, 'web']];
 		const unsignedEvent = {
 			kind: 1,
 			pubkey: '',
@@ -108,7 +108,7 @@ const isDebug = false;
 				latestTimeNew = pubDate;
 			}
 		}
-		if (message.size != 0) {
+		if (message.size !== 0) {
 			message.add('#' + hashTag);
 			console.log(Array.from(message).join('\n'));
 		}
