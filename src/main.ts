@@ -42,6 +42,7 @@ const isDebug = false;
 			fs.writeFileSync(saveFileName, JSON.stringify(obj, null, '\t'));
 		}
 		console.log('save complete');
+		process.exit(0);
 	}
 	else {
 		console.log('not updated.');
