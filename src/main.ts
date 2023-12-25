@@ -2,7 +2,7 @@ import Parser from 'rss-parser';
 import {
 	SimplePool,
 	nip19,
-	finishEvent,
+	finalizeEvent,
 } from 'nostr-tools';
 import 'websocket-polyfill';
 import {
@@ -25,7 +25,11 @@ const isDebug = false;
 	if (message !== '') {
 		if (!isDebug) {
 			const {type, data} = nip19.decode(NOSTR_PRIVATE_KEY);
-			const sk: string = type  === 'nsec' ? data : '';
+			if (type !== 'nsec') {
+				console.warn('NOSTR_PRIVATE_KEY is not nsec');
+				return;
+			}
+			const sk: Uint8Array = data;
 			await postNostr(sk, message, obj.relays, urls, obj.hashTag);
 			await postBluesky(BLUESKY_IDENTIFIER, BLUESKY_PASSWORD, message);
 		}
@@ -44,17 +48,16 @@ const isDebug = false;
 	}
 
 	// Nostrに投稿
-	async function postNostr(sk: string, message: string, relays: string[], urls: string[], hashTag: string) {
-		const pool = new SimplePool({eoseSubTimeout: 60, getTimeout: 60});
+	async function postNostr(sk: Uint8Array, message: string, relays: string[], urls: string[], hashTag: string) {
+		const pool = new SimplePool();
 		const tags = [['t', hashTag], ...urls.map(url => ['r', url]), ['proxy', obj.webUrl, 'web']];
 		const unsignedEvent = {
 			kind: 1,
-			pubkey: '',
 			created_at: Math.floor(Date.now() / 1000),
 			tags: tags,
 			content: message,
 		};
-		const signedEvent = finishEvent(unsignedEvent, sk)
+		const signedEvent = finalizeEvent(unsignedEvent, sk)
 		const pubs = pool.publish(relays, signedEvent);
 		await Promise.all(pubs);
 		pool.close(relays);
