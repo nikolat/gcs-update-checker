@@ -18,7 +18,7 @@
 	"private": true,
 	"dependencies": {
 		"@atproto/api": "^0.7.4",
-		"nostr-tools": "2.0.3",
+		"nostr-tools": "^2.1.1",
 		"ts-node": "^10.9.2"
 	}
 }
