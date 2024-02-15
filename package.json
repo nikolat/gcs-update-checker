@@ -9,7 +9,7 @@
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
-		"@types/node": "^20.10.5",
+		"@types/node": "^20.11.18",
 		"rss-parser": "^3.13.0",
 		"typescript": "^5.3.3",
 		"websocket-polyfill": "^0.0.3"
@@ -17,8 +17,8 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"dependencies": {
-		"@atproto/api": "^0.7.4",
-		"nostr-tools": "^2.1.1",
+		"@atproto/api": "^0.9.6",
+		"nostr-tools": "^2.1.9",
 		"ts-node": "^10.9.2"
 	}
 }
