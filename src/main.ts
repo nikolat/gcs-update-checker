@@ -1,15 +1,16 @@
-import Parser from 'rss-parser';
 import {
 	SimplePool,
 	nip19,
 	finalizeEvent,
+	useWebSocketImplementation,
 } from 'nostr-tools';
-import 'websocket-polyfill';
+useWebSocketImplementation(require('ws'))
 import {
 	AppBskyFeedPost,
 	BskyAgent,
-	RichText
+	RichText,
 } from '@atproto/api';
+import Parser from 'rss-parser';
 
 const isDebug = false;
 

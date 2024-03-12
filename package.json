@@ -9,16 +9,16 @@
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
-		"@types/node": "^20.11.18",
+		"@types/node": "^20.11.26",
 		"rss-parser": "^3.13.0",
-		"typescript": "^5.3.3",
-		"websocket-polyfill": "^0.0.3"
+		"typescript": "^5.4.2"
 	},
 	"license": "UNLICENSED",
 	"private": true,
 	"dependencies": {
-		"@atproto/api": "^0.9.6",
-		"nostr-tools": "2.1.7",
-		"ts-node": "^10.9.2"
+		"@atproto/api": "^0.10.5",
+		"nostr-tools": "^2.3.1",
+		"ts-node": "^10.9.2",
+		"ws": "^8.16.0"
 	}
 }
