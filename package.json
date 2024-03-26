@@ -9,15 +9,15 @@
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
-		"@types/node": "^20.11.26",
+		"@types/node": "^20.11.30",
 		"rss-parser": "^3.13.0",
-		"typescript": "^5.4.2"
+		"typescript": "^5.4.3"
 	},
 	"license": "UNLICENSED",
 	"private": true,
 	"dependencies": {
-		"@atproto/api": "^0.10.5",
-		"nostr-tools": "^2.3.1",
+		"@atproto/api": "^0.12.2",
+		"nostr-tools": "^2.3.2",
 		"ts-node": "^10.9.2",
 		"ws": "^8.16.0"
 	}
