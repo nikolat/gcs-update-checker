@@ -4,7 +4,7 @@ import {
 	finalizeEvent,
 	useWebSocketImplementation,
 } from 'nostr-tools';
-useWebSocketImplementation(require('ws'))
+useWebSocketImplementation(require('ws'));
 import {
 	AppBskyFeedPost,
 	BskyAgent,
@@ -61,7 +61,7 @@ const isDebug = false;
 		};
 		const signedEvent = finalizeEvent(unsignedEvent, sk)
 		const pubs = pool.publish(relays, signedEvent);
-		await Promise.all(pubs);
+		await Promise.any(pubs);
 		pool.close(relays);
 	}
 
