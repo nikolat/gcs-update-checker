@@ -1,9 +1,6 @@
-import {
-	SimplePool,
-	nip19,
-	finalizeEvent,
-	useWebSocketImplementation,
-} from 'nostr-tools';
+import * as nip19 from 'nostr-tools/nip19';
+import { finalizeEvent } from 'nostr-tools/pure';
+import { SimplePool, useWebSocketImplementation } from 'nostr-tools/pool';
 useWebSocketImplementation(require('ws'));
 import {
 	AppBskyFeedPost,
