@@ -4,12 +4,13 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"check": "ts-node src/main.ts"
+		"check": "node --loader ts-node/esm src/main.ts"
 	},
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
 		"@types/node": "^20.12.7",
+		"@types/ws": "^8.5.10",
 		"rss-parser": "^3.13.0",
 		"typescript": "^5.4.5"
 	},
