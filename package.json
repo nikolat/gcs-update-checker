@@ -16,10 +16,10 @@
 	"license": "UNLICENSED",
 	"private": true,
 	"dependencies": {
-		"@atproto/api": "^0.12.5",
-		"nostr-tools": "^2.5.0",
+		"@atproto/api": "^0.12.13",
+		"nostr-tools": "^2.7.0",
 		"ts-node": "^10.9.2",
-		"ws": "^8.16.0"
+		"ws": "^8.17.0"
 	},
 	"type": "module"
 }
