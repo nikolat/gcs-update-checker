@@ -57,7 +57,7 @@ const isDebug = false;
 			tags: tags,
 			content: message,
 		};
-		const signedEvent = finalizeEvent(unsignedEvent, sk)
+		const signedEvent = finalizeEvent(unsignedEvent, sk);
 		const pubs = pool.publish(relays, signedEvent);
 		await Promise.any(pubs);
 		pool.close(relays);

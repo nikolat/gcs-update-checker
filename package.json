@@ -9,7 +9,7 @@
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
-		"@types/node": "^20.12.7",
+		"@types/node": "^20.12.13",
 		"@types/ws": "^8.5.10",
 		"rss-parser": "^3.13.0",
 		"typescript": "^5.4.5"
