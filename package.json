@@ -9,18 +9,18 @@
 	"keywords": [],
 	"author": "",
 	"devDependencies": {
-		"@types/node": "^20.12.13",
+		"@types/node": "^20.14.8",
 		"@types/ws": "^8.5.10",
 		"rss-parser": "^3.13.0",
-		"typescript": "^5.4.5"
+		"typescript": "^5.5.2"
 	},
 	"license": "UNLICENSED",
 	"private": true,
 	"dependencies": {
-		"@atproto/api": "^0.12.13",
+		"@atproto/api": "^0.12.21",
 		"nostr-tools": "^2.7.0",
 		"ts-node": "^10.9.2",
-		"ws": "^8.17.0"
+		"ws": "^8.17.1"
 	},
 	"type": "module"
 }
