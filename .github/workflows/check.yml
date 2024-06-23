@@ -12,6 +12,7 @@ jobs:
       NOSTR_PRIVATE_KEY: ${{ secrets.NOSTR_PRIVATE_KEY }}
       BLUESKY_IDENTIFIER: ${{ secrets.BLUESKY_IDENTIFIER }}
       BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+      CONCRNT_SUBKEY: ${{ secrets.CONCRNT_SUBKEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

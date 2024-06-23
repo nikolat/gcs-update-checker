@@ -18,6 +18,7 @@
 	"private": true,
 	"dependencies": {
 		"@atproto/api": "^0.12.21",
+		"@concurrent-world/client": "^6.0.17",
 		"nostr-tools": "^2.7.0",
 		"ts-node": "^10.9.2",
 		"ws": "^8.17.1"

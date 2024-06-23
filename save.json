@@ -6,5 +6,6 @@
 	"relays": [
 		"wss://relay.nostr.wirednet.jp",
 		"wss://nostr-relay.nokotaro.com"
-	]
+	],
+	"targetStream": "t58q2xgwj1gtb7pdk06847pb1zg@ariake.concrnt.net"
 }

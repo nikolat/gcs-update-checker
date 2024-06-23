@@ -9,6 +9,7 @@ import {
 	BskyAgent,
 	RichText,
 } from '@atproto/api';
+import { Client } from '@concurrent-world/client';
 import Parser from 'rss-parser';
 
 const isDebug = false;
@@ -20,6 +21,7 @@ const isDebug = false;
 	const NOSTR_PRIVATE_KEY = process.env.NOSTR_PRIVATE_KEY ?? '';
 	const BLUESKY_IDENTIFIER = process.env.BLUESKY_IDENTIFIER ?? '';
 	const BLUESKY_PASSWORD = process.env.BLUESKY_PASSWORD ?? '';
+	const CONCRNT_SUBKEY = process.env.CONCRNT_SUBKEY ?? '';
 	const [message, latestTimeNew, urls] = await getMessage(obj.rssUrl, obj.hashTag, latestTime);
 	if (message !== '') {
 		if (!isDebug) {
@@ -31,6 +33,7 @@ const isDebug = false;
 			const sk: Uint8Array = data;
 			await postNostr(sk, message, obj.relays, urls, obj.hashTag);
 			await postBluesky(BLUESKY_IDENTIFIER, BLUESKY_PASSWORD, message);
+			await postConcrnt(obj.targetStream, CONCRNT_SUBKEY, message);
 		}
 		else {
 			console.log('message length: ', message.length);
@@ -80,6 +83,19 @@ const isDebug = false;
 		};
 		const res = await agent.post(postRecord);
 		console.log(res);
+	}
+
+	// Concrntに投稿
+	async function postConcrnt(targetStream: string, subkey:string, body: string) {
+		const client = await Client.createFromSubkey(subkey);
+		if (client.user === null) {
+			console.warn('client.user is null');
+			return;
+		}
+		await client.createMarkdownCrnt(
+			body,
+			[client.user.homeTimeline, targetStream],
+		);
 	}
 
 	// RSSを見に行って新着情報を取得
