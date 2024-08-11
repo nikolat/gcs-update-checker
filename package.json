@@ -1,29 +1,32 @@
 {
-	"name": "gcs-update-checker",
-	"version": "1.0.0",
-	"description": "",
-	"keywords": [],
-	"main": "index.js",
-	"license": "CC0-1.0",
-	"author": {
-		"name": "Don"
-	},
-	"scripts": {
-		"check": "node --loader ts-node/esm src/main.ts"
-	},
-	"dependencies": {
-		"@atproto/api": "^0.12.29",
-		"@concurrent-world/client": "^6.0.26",
-		"nostr-tools": "^2.7.2",
-		"ws": "^8.18.0"
-	},
-	"devDependencies": {
-		"@types/node": "^22.2.0",
-		"@types/ws": "^8.5.12",
-		"rss-parser": "^3.13.0",
-		"ts-node": "^10.9.2",
-		"typescript": "^5.5.4"
-	},
-	"private": true,
-	"type": "module"
+  "name": "gcs-update-checker",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "index.js",
+  "license": "CC0-1.0",
+  "author": {
+    "name": "Don"
+  },
+  "scripts": {
+    "check": "node --loader ts-node/esm src/main.ts",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@atproto/api": "^0.12.29",
+    "@concurrent-world/client": "^6.0.26",
+    "nostr-tools": "^2.7.2",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.2.0",
+    "@types/ws": "^8.5.12",
+    "prettier": "^3.3.3",
+    "rss-parser": "^3.13.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "private": true,
+  "type": "module"
 }
