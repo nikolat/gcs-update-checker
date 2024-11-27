@@ -70,7 +70,7 @@ const isDebug = false;
     };
     const signedEvent = finalizeEvent(unsignedEvent, sk);
     const pubs = pool.publish(relays, signedEvent);
-    await Promise.any(pubs);
+    await Promise.allSettled(pubs);
     pool.close(relays);
   }
 
