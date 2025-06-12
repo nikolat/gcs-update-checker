@@ -2,7 +2,7 @@ import * as nip19 from 'nostr-tools/nip19';
 import { finalizeEvent } from 'nostr-tools/pure';
 import { SimplePool } from 'nostr-tools/pool';
 import { readFileSync, writeFileSync } from 'node:fs';
-import { AppBskyFeedPost, BskyAgent, RichText } from '@atproto/api';
+import { AppBskyFeedPost, AtpAgent, RichText } from '@atproto/api';
 import { Client } from '@concurrent-world/client';
 import Parser from 'rss-parser';
 
@@ -78,7 +78,7 @@ const isDebug = false;
     password: string,
     text: string,
   ) {
-    const agent = new BskyAgent({ service: 'https://bsky.social' });
+    const agent = new AtpAgent({ service: 'https://bsky.social' });
     await agent.login({
       identifier,
       password,

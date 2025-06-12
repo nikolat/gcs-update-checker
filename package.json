@@ -9,20 +9,19 @@
     "name": "Don"
   },
   "scripts": {
-    "check": "node --import \"data:text/javascript,import { register } from 'node:module'; import { pathToFileURL } from 'node:url'; register('ts-node/esm', pathToFileURL('./'));\" ./src/main.ts",
+    "check": "node --experimental-strip-types --no-warnings=ExperimentalWarning ./src/main.ts",
     "lint": "prettier --check .",
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@atproto/api": "^0.12.29",
+    "@atproto/api": "^0.15.14",
     "@concurrent-world/client": "^6.5.7",
-    "nostr-tools": "^2.10.4"
+    "nostr-tools": "^2.15.0"
   },
   "devDependencies": {
-    "@types/node": "^22.13.1",
+    "@types/node": "^24.0.1",
     "prettier": "^3.4.2",
     "rss-parser": "^3.13.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },
   "private": true,
