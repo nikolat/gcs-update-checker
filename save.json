@@ -7,6 +7,5 @@
     "wss://relay.nostr.wirednet.jp/",
     "wss://relay.damustr.com/",
     "wss://n.kojira.io/"
-  ],
-  "targetStream": "t58q2xgwj1gtb7pdk06847pb1zg@ariake.concrnt.net"
+  ]
 }
