@@ -18,7 +18,7 @@
     "nostr-tools": "^2.25.2"
   },
   "devDependencies": {
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.6.4",
     "prettier": "^3.9.9",
     "rss-parser": "^3.13.0",
     "typescript": "^7.0.2"
